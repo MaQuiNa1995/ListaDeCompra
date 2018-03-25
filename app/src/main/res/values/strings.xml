@@ -1,0 +1,17 @@
+<resources>
+    <!-- Ventana Principal -->
+    <string name="nombre_aplicacion">Lista De La Compra</string>
+    <string name="crear_lista">Crear Lista</string>
+    <string name="gestionar_listas_creadas">Gestionar Listas Creadas</string>
+    <string name="salir">Cerrar Aplicación</string>
+
+    <!-- Ventana Gestion Listas -->
+    <string name="annadir_producto">Añadir Producto</string>
+    <string name="nombre_producto">Nombre Del Producto</string>
+
+    <!-- Ventana Creacion Lista Compra -->
+    <string name="cantidad">Cantidad a Comprar</string>
+    <string name="previsualizacion">Previsualización De La Lista De La Compra:</string>
+    <string name="eliminarProducto">Eliminar Producto</string>
+
+</resources>

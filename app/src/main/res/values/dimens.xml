@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="tamanoFuente">16sp</dimen>
+    <dimen name="marginRowView">20sp</dimen>
+</resources>
