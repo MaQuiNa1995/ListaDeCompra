@@ -23,15 +23,12 @@ public class ProductoRepository extends SQLiteOpenHelper {
     private static final String COLUMNA_ID = "ID";
     private static final String COLUMNA_NOMBRRE = "NOMBRE_PRODUCTO";
     private static final String COLUMNA_CANTIDAD = "CANTIDAD_PRODUCTO";
-    //private static final String COLUMNA_COGIDO = "COGIDO";
+    private static final String COLUMNA_COGIDO = "COGIDO";
 
     public ProductoRepository(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 
-    /*
-     * Metodo para guardar un producto en base de datos
-     */
     public void annadirProducto(Producto producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
@@ -39,7 +36,7 @@ public class ProductoRepository extends SQLiteOpenHelper {
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
             contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            //contenedor.put(COLUMNA_COGIDO, producto.getCogido());
+            contenedor.put(COLUMNA_COGIDO, producto.getCogido());
 
             db.insert(NOMBRE_TABLA, null, contenedor);
 
@@ -49,14 +46,14 @@ public class ProductoRepository extends SQLiteOpenHelper {
 
     }
 
-    public int updatePerson(Producto producto) {
+    public int actualizarProducto(Producto producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
             contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            //contenedor.put(COLUMNA_COGIDO, producto.getCogido());
+            contenedor.put(COLUMNA_COGIDO, producto.getCogido());
 
             return db.update(NOMBRE_TABLA, contenedor, COLUMNA_ID + " =?", new String[]{String.valueOf(producto.getId())});
 
@@ -113,37 +110,25 @@ public class ProductoRepository extends SQLiteOpenHelper {
 
     public List<Producto> getListaProductos() {
 
-        List<Producto> listaProductos = null;
+        List<Producto> listaProductos = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NOMBRE_TABLA;
 
         Producto producto = null;
 
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
+        try (SQLiteDatabase db = this.getWritableDatabase(); Cursor cursor = db.rawQuery(selectQuery, null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    producto = new Producto();
+                    producto.setId(cursor.getInt(0));
+                    producto.setNombre(cursor.getString(1));
+                    producto.setCantidad(cursor.getInt(2));
+                    producto.setCogido(cursor.getInt(3));
 
-
-            try (Cursor cursor = db.rawQuery(selectQuery, null)) {
-
-                listaProductos = new ArrayList<>();
-
-                if (cursor.moveToFirst()) {
-                    do {
-                        producto = new Producto();
-                        producto.setId(cursor.getInt(0));
-                        producto.setNombre(cursor.getString(1));
-                        producto.setCantidad(cursor.getInt(2));
-                        //producto.setCogido(cursor.getInt(3));
-
-                        listaProductos.add(producto);
-
-                    }
-                    while (cursor.moveToNext());
+                    listaProductos.add(producto);
 
                 }
-            } catch (Exception e) {
-                Log.wtf("Error al obtener lista productos", "Ha ocurrido un error al intentar recuperar la lista de productos " + producto.toString() + " Traza de log: " + e.getMessage());
-                listaProductos = null;
+                while (cursor.moveToNext());
             }
-
         } catch (Exception e) {
             listaProductos = null;
             Log.e("Error al obtener lista", "Ha ocurrido un error al intentar recuperar la lista de productos  Traza de log: " + e.getMessage());
@@ -158,7 +143,8 @@ public class ProductoRepository extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + NOMBRE_TABLA + "("
                 + COLUMNA_ID + " INTEGER PRIMARY KEY,"
                 + COLUMNA_NOMBRRE + " TEXT,"
-                + COLUMNA_CANTIDAD + " INTEGER"
+                + COLUMNA_CANTIDAD + " INTEGER,"
+                + COLUMNA_COGIDO + " INTEGER"
                 + ")";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);

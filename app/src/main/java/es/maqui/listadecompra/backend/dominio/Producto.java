@@ -5,6 +5,7 @@ public class Producto {
     private long id;
     private String nombre;
     private int cantidad;
+    private int cogido;
 
     public long getId() {
         return id;
@@ -28,6 +29,14 @@ public class Producto {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public int getCogido() {
+        return cogido;
+    }
+
+    public void setCogido(int cogido) {
+        this.cogido = cogido;
     }
 
     @Override

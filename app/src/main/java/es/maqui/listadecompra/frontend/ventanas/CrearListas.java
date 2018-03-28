@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
@@ -41,23 +42,31 @@ public class CrearListas extends AppCompatActivity {
         botonAnnadir = findViewById(R.id.botonAnadirProducto);
         botonEliminar = findViewById(R.id.botonEliminarProducto);
 
-
         listaProductos = repositoryProducto.getListaProductos();
+
+        if(listaProductos == null){
+            listaProductos = new ArrayList<>();
+        }
+
         refrescarDatos(listaProductos);
 
-
         botonAnnadir.setOnClickListener((View v) -> {
+
             Producto producto = new Producto();
             producto.setNombre(textNombreProducto.getText().toString());
             producto.setCantidad(Integer.parseInt(textCantidadProducto.getText().toString()));
-            listaProductos.add(producto);
+            producto.setCogido(0);
 
+            listaProductos.add(producto);
             repositoryProducto.annadirProducto(producto);
+
+            textNombreProducto.setText("");
+            textCantidadProducto.setText("");
 
             refrescarDatos(listaProductos);
         });
 
-        botonEliminar.setOnClickListener((View v) -> refrescarDatos(listaProductos));
+        //botonEliminar.setOnClickListener((View v) -> refrescarDatos(listaProductos));
     }
 
     private void refrescarDatos(List<Producto> listaProductos) {
