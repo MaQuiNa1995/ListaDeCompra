@@ -12,12 +12,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.dominio.Producto;
 
 public class ProductoCompletoAdapter extends BaseAdapter {
 
     private List<Producto> listaProductos;
     private LayoutInflater inflater;
+
+    private Producto producto;
+    private int posicion;
 
     public ProductoCompletoAdapter(Activity activity, List<Producto> listaProductos) {
         this.listaProductos = listaProductos;
@@ -52,7 +54,6 @@ public class ProductoCompletoAdapter extends BaseAdapter {
         switchCogido.setChecked((listaProductos.get(i).getCogido() < 1) ? false : true);
 
         rowView.setOnClickListener((View v) -> {
-                // TODO relllenar boton
         });
 
         return rowView;

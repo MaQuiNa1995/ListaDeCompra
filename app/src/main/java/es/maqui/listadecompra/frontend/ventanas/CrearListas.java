@@ -6,18 +6,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.dominio.Producto;
-import es.maqui.listadecompra.backend.repository.ProductoRepository;
+import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
 import es.maqui.listadecompra.frontend.componentes.ProductoAdapter;
 
 public class CrearListas extends AppCompatActivity {
 
-    private ProductoRepository repositoryProducto;
+    private ProductoAlmacenRepository repositoryProducto;
 
     private TextView textNombreProducto;
     private TextView textCantidadProducto;
@@ -28,16 +28,21 @@ public class CrearListas extends AppCompatActivity {
     private Button botonAnnadir;
     private Button botonEliminar;
 
+    private ProductoAdapter adapter=null;
+
+    private Producto prodSeleccionado=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crear_listas);
-        repositoryProducto = new ProductoRepository(this);
+        repositoryProducto = new ProductoAlmacenRepository(this);
 
         textNombreProducto = findViewById(R.id.textNombreProducto);
         textCantidadProducto = findViewById(R.id.textCantidad);
 
         lstProductosView = findViewById(R.id.listaCreacionProductos);
+        lstProductosView.setClickable(Boolean.TRUE);
 
         botonAnnadir = findViewById(R.id.botonAnadirProducto);
         botonEliminar = findViewById(R.id.botonEliminarProducto);
@@ -64,15 +69,31 @@ public class CrearListas extends AppCompatActivity {
             textCantidadProducto.setText("");
 
             refrescarDatos(listaProductos);
+
+            mostrarNotificacion("Se Ha Añadido: "+producto.getNombre());
         });
 
-        //botonEliminar.setOnClickListener((View v) -> refrescarDatos(listaProductos));
+        botonEliminar.setOnClickListener((View v) -> {
+
+            if(prodSeleccionado!=null) {
+                repositoryProducto.eliminarProducto(prodSeleccionado);
+
+                refrescarDatos(listaProductos);
+                mostrarNotificacion("Se Ha Eliminado: " + prodSeleccionado.getNombre());
+            }else{
+                mostrarNotificacion("Error: No se ha seleccionado ningún producto");
+            }
+        });
     }
 
     private void refrescarDatos(List<Producto> listaProductos) {
         if ((listaProductos != null) && (listaProductos.size() != 0)) {
-            ProductoAdapter adapter = new ProductoAdapter(CrearListas.this, listaProductos);
+            adapter = new ProductoAdapter(CrearListas.this, listaProductos);
             lstProductosView.setAdapter(adapter);
         }
+    }
+
+    private void mostrarNotificacion(String contenido){
+        Toast.makeText(this, contenido, Toast.LENGTH_SHORT).show();
     }
 }

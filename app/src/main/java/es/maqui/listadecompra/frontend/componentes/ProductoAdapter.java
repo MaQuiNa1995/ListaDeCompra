@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.dominio.Producto;
 
 public class ProductoAdapter extends BaseAdapter {
 
