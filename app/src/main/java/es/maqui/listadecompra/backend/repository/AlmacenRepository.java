@@ -15,7 +15,7 @@ import es.maqui.listadecompra.backend.dominio.Almacen;
 public class AlmacenRepository extends SQLiteOpenHelper {
 
     //Base De Datos
-    private static final int VERSION_BD = 1;
+    private static final int VERSION_BD = 2;
     private static final String NOMBRE_BD = "MaquiListaCompraBD";
 
     //Tablas
@@ -78,7 +78,6 @@ public class AlmacenRepository extends SQLiteOpenHelper {
             try (Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE}, COLUMNA_ID + "=?",
                     new String[]{String.valueOf(id)}, null, null, null, null)) {
 
-
                 if (cursor != null) {
                     cursor.moveToFirst();
 
@@ -88,15 +87,15 @@ public class AlmacenRepository extends SQLiteOpenHelper {
                 }
             } catch (Exception e) {
                 Log.wtf("Error al obtener producto", "Ha ocurrido un error al intentar recuperar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
-                return null;
+                almacen = null;
             }
-
-            return almacen;
 
         } catch (Exception e) {
             Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
-            return null;
+            almacen = null;
         }
+
+        return almacen;
 
     }
 

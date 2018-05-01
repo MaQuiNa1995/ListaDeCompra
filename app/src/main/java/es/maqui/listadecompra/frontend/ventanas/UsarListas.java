@@ -9,12 +9,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
+import es.maqui.listadecompra.backend.repository.ProductoRepository;
 import es.maqui.listadecompra.frontend.componentes.ProductoCompletoAdapter;
 
 public class UsarListas extends AppCompatActivity {
 
-    private ProductoAlmacenRepository repositoryProducto;
+    private ProductoRepository repositoryProducto;
 
     private ListView lstProductosView;
     private TextView nombreProducto;
@@ -26,7 +26,7 @@ public class UsarListas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_productos_completa);
 
-        repositoryProducto = new ProductoAlmacenRepository(this);
+        repositoryProducto = new ProductoRepository(this);
 
         nombreProducto = findViewById(R.id.rowNombreProductoListaDefinitiva);
         cantidadProducto = findViewById(R.id.rowCantidadProductoListaDefinitiva);

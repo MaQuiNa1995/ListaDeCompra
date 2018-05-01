@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoAlmacenRepository extends SQLiteOpenHelper {
+public class ProductoRepository extends SQLiteOpenHelper {
 
     //Base De Datos
     private static final int VERSION_BD = 1;
@@ -23,7 +23,7 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
     private static final String COLUMNA_CANTIDAD = "CANTIDAD_PRODUCTO";
     private static final String COLUMNA_COGIDO = "COGIDO";
 
-    public ProductoAlmacenRepository(Context context) {
+    public ProductoRepository(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 

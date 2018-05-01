@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
+import es.maqui.listadecompra.backend.repository.ProductoRepository;
 import es.maqui.listadecompra.frontend.componentes.ProductoAdapter;
 
 public class CrearListas extends AppCompatActivity {
 
-    private ProductoAlmacenRepository repositoryProducto;
+    private ProductoRepository repositoryProducto;
 
     private TextView textNombreProducto;
     private TextView textCantidadProducto;
@@ -36,7 +36,7 @@ public class CrearListas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crear_listas);
-        repositoryProducto = new ProductoAlmacenRepository(this);
+        repositoryProducto = new ProductoRepository(this);
 
         textNombreProducto = findViewById(R.id.textNombreProducto);
         textCantidadProducto = findViewById(R.id.textCantidad);

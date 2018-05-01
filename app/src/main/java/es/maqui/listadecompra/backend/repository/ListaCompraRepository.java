@@ -10,31 +10,32 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.maqui.listadecompra.backend.dominio.ListaCompra;
+
 public class ListaCompraRepository extends SQLiteOpenHelper {
 
     //Base De Datos
-    private static final int VERSION_BD = 1;
+    private static final int VERSION_BD = 2;
     private static final String NOMBRE_BD = "MaquiListaCompraBD";
 
     //Tablas
     private static final String NOMBRE_TABLA = "LISTA_COMPRA";
     private static final String COLUMNA_ID = "ID";
     private static final String COLUMNA_NOMBRRE = "NOMBRE_PRODUCTO";
-    private static final String COLUMNA_CANTIDAD = "CANTIDAD_PRODUCTO";
-    private static final String COLUMNA_COGIDO = "COGIDO";
+    private static final String COLUMNA_ID_PRODUCTO = "ID_PRODUCTOS";
+
 
     public ListaCompraRepository(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 
-    public void annadirProducto(Producto producto) {
+    public void annadirProducto(ListaCompra producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
-            contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            contenedor.put(COLUMNA_COGIDO, producto.getCogido());
+            contenedor.put(COLUMNA_ID_PRODUCTO, producto.getIdProducto());
 
             db.insert(NOMBRE_TABLA, null, contenedor);
 
@@ -44,14 +45,12 @@ public class ListaCompraRepository extends SQLiteOpenHelper {
 
     }
 
-    public int actualizarProducto(Producto producto) {
+    public int actualizarListaCompra(ListaCompra producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
-            contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            contenedor.put(COLUMNA_COGIDO, producto.getCogido());
 
             return db.update(NOMBRE_TABLA, contenedor, COLUMNA_ID + " =?", new String[]{String.valueOf(producto.getId())});
 
@@ -61,7 +60,7 @@ public class ListaCompraRepository extends SQLiteOpenHelper {
         }
     }
 
-    public void eliminarProducto(Producto producto) {
+    public void eliminarListaCompra(ListaCompra producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
@@ -72,58 +71,53 @@ public class ListaCompraRepository extends SQLiteOpenHelper {
         }
     }
 
-    public Producto getProducto(int id) {
+    public ListaCompra getListaCompra(int id) {
 
-        Producto producto = null;
+        ListaCompra almacen = null;
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
 
-            try (Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE, COLUMNA_CANTIDAD}, COLUMNA_ID + "=?",
+            try (Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE, COLUMNA_ID_PRODUCTO}, COLUMNA_ID + "=?",
                     new String[]{String.valueOf(id)}, null, null, null, null)) {
-
 
                 if (cursor != null) {
                     cursor.moveToFirst();
 
-                    producto = new Producto();
-                    producto.setId(cursor.getInt(0));
-                    producto.setNombre(cursor.getString(1));
-                    producto.setCantidad(cursor.getInt(2));
-                    //producto.setCogido(cursor.getInt(3));
+                    almacen = new ListaCompra();
+                    almacen.setId(cursor.getLong(0));
+                    almacen.setNombre(cursor.getString(1));
+                    almacen.setIdProducto(cursor.getLong(2));
                 }
             } catch (Exception e) {
-                Log.wtf("Error al obtener producto", "Ha ocurrido un error al intentar recuperar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
-                return null;
+                Log.wtf("Error al obtener producto", "Ha ocurrido un error al intentar recuperar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
+                almacen = null;
             }
 
-            return producto;
-
         } catch (Exception e) {
-            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
-            return null;
+            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
+            almacen = null;
         }
+
+        return almacen;
 
     }
 
-    public List<Producto> getListaProductos() {
+    public List<ListaCompra> getListaProductos() {
 
-        List<Producto> listaProductos = new ArrayList<>();
+        List<ListaCompra> listaProductos = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NOMBRE_TABLA;
-
-        Producto producto = null;
 
         try (SQLiteDatabase db = this.getWritableDatabase(); Cursor cursor = db.rawQuery(selectQuery, null)) {
             if (cursor.moveToFirst()) {
                 do {
-                    producto = new Producto();
-                    producto.setId(cursor.getInt(0));
+                    ListaCompra producto = new ListaCompra();
+
+                    producto.setId(cursor.getLong(0));
                     producto.setNombre(cursor.getString(1));
-                    producto.setCantidad(cursor.getInt(2));
-                    producto.setCogido(cursor.getInt(3));
+                    producto.setIdProducto(cursor.getLong(2));
 
                     listaProductos.add(producto);
-
                 }
                 while (cursor.moveToNext());
             }
@@ -140,9 +134,7 @@ public class ListaCompraRepository extends SQLiteOpenHelper {
 
         String CREATE_TABLE = "CREATE TABLE " + NOMBRE_TABLA + "("
                 + COLUMNA_ID + " INTEGER PRIMARY KEY,"
-                + COLUMNA_NOMBRRE + " TEXT,"
-                + COLUMNA_CANTIDAD + " INTEGER,"
-                + COLUMNA_COGIDO + " INTEGER"
+                + COLUMNA_NOMBRRE + " TEXT"
                 + ")";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);
