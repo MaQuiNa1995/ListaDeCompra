@@ -4,7 +4,6 @@ public class ListaCompra {
 
     private Long id;
     private String nombre;
-    private Long idProducto;
 
     public Long getId() {
         return id;
@@ -20,13 +19,5 @@ public class ListaCompra {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public Long getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
     }
 }

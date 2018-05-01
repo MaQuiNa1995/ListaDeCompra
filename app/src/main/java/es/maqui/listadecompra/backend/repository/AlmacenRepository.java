@@ -27,44 +27,44 @@ public class AlmacenRepository extends SQLiteOpenHelper {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 
-    public void annadirAlmacen(Almacen producto) {
+    public void annadirAlmacen(Almacen almacen) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
-            contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
+            contenedor.put(COLUMNA_NOMBRRE, almacen.getNombre());
 
             db.insert(NOMBRE_TABLA, null, contenedor);
 
         } catch (Exception e) {
-            Log.e("Error al guardar", "Ha ocurrido un error al intentar guardar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
+            Log.e("Error al guardar", "Ha ocurrido un error al intentar guardar el almacen " + almacen.toString() + " Traza de log: " + e.getMessage());
         }
 
     }
 
-    public int actualizarAlmacen(Almacen producto) {
+    public int actualizarAlmacen(Almacen almacen) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
-            contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
+            contenedor.put(COLUMNA_NOMBRRE, almacen.getNombre());
 
-            return db.update(NOMBRE_TABLA, contenedor, COLUMNA_ID + " =?", new String[]{String.valueOf(producto.getId())});
+            return db.update(NOMBRE_TABLA, contenedor, COLUMNA_ID + " =?", new String[]{String.valueOf(almacen.getId())});
 
         } catch (Exception e) {
-            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
+            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el almacen " + almacen.toString() + " Traza de log: " + e.getMessage());
             return -404;
         }
     }
 
-    public void eliminarAlmacen(Almacen producto) {
+    public void eliminarAlmacen(Almacen almacen) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
-            db.delete(NOMBRE_TABLA, COLUMNA_ID + " =?", new String[]{String.valueOf(producto.getId())});
+            db.delete(NOMBRE_TABLA, COLUMNA_ID + " =?", new String[]{String.valueOf(almacen.getId())});
 
         } catch (Exception e) {
-            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
+            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el almacen " + almacen.toString() + " Traza de log: " + e.getMessage());
         }
     }
 
@@ -72,34 +72,26 @@ public class AlmacenRepository extends SQLiteOpenHelper {
 
         Almacen almacen = null;
 
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
+        try (SQLiteDatabase db = this.getWritableDatabase();
+             Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE}, COLUMNA_ID + "=?",
+                     new String[]{String.valueOf(id)}, null, null, null, null)) {
 
+            if (cursor != null) {
+                cursor.moveToFirst();
 
-            try (Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE}, COLUMNA_ID + "=?",
-                    new String[]{String.valueOf(id)}, null, null, null, null)) {
-
-                if (cursor != null) {
-                    cursor.moveToFirst();
-
-                    almacen = new Almacen();
-                    almacen.setId(cursor.getLong(0));
-                    almacen.setNombre(cursor.getString(1));
-                }
-            } catch (Exception e) {
-                Log.wtf("Error al obtener producto", "Ha ocurrido un error al intentar recuperar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
-                almacen = null;
+                almacen = new Almacen();
+                almacen.setId(cursor.getLong(0));
+                almacen.setNombre(cursor.getString(1));
             }
-
         } catch (Exception e) {
-            Log.e("Error al modificar", "Ha ocurrido un error al intentar modificar el producto " + almacen.toString() + " Traza de log: " + e.getMessage());
+            Log.wtf("Error al obtener almacén", "Ha ocurrido un error al intentar recuperar el almacén " + almacen.toString() + " Traza de log: " + e.getMessage());
             almacen = null;
         }
 
         return almacen;
-
     }
 
-    public List<Almacen> getListaProductos() {
+    public List<Almacen> getListaAlmacenes() {
 
         List<Almacen> listaProductos = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NOMBRE_TABLA;
@@ -127,10 +119,11 @@ public class AlmacenRepository extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        String CREATE_TABLE = "CREATE TABLE " + NOMBRE_TABLA + "("
-                + COLUMNA_ID + " INTEGER PRIMARY KEY,"
-                + COLUMNA_NOMBRRE + " TEXT"
-                + ")";
+        String CREATE_TABLE =
+                "CREATE TABLE " + NOMBRE_TABLA + "("
+                        + COLUMNA_ID + " INTEGER PRIMARY KEY,"
+                        + COLUMNA_NOMBRRE + " TEXT"
+                        + ")";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);
     }
