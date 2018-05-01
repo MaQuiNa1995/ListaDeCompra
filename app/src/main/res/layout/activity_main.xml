@@ -28,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/crear_lista" />
+            android:text="@string/gestion_Almacen" />
 
         <Button
             android:id="@+id/botonGestionarListasCreadas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/gestionar_listas_creadas" />
+            android:text="@string/gestion_ListasCompra" />
 
         <Button
             android:id="@+id/botonCerrarAplicacion"
@@ -44,10 +44,6 @@
             android:layout_weight="1"
             android:text="@string/salir" />
 
-
     </LinearLayout>
-
-
-
 
 </LinearLayout>

@@ -6,49 +6,51 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
 
 import es.maqui.listadecompra.R;
+import es.maqui.listadecompra.backend.dominio.Almacen;
 
-public class ProductoAdapter extends BaseAdapter {
+public class AlmacenAdapter extends BaseAdapter {
 
-    private List<Producto> listaProductos;
+    private List<Almacen> listaAlmacenes;
     private LayoutInflater inflater;
 
-    public ProductoAdapter(Activity activity, List<Producto> listaProductos) {
-        this.listaProductos = listaProductos;
+    public AlmacenAdapter(Activity activity, List<Almacen> listaAlmacenes) {
+        this.listaAlmacenes = listaAlmacenes;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return listaProductos.size();
+        return listaAlmacenes.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listaProductos.get(i);
+        return listaAlmacenes.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return listaProductos.get(i).getId();
+        return listaAlmacenes.get(i).getId();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View rowView = inflater.inflate(R.layout.plantilla_lista_compra, null);
+        View rowView = inflater.inflate(R.layout., null);
 
-        final TextView txtRowNombreProducto = rowView.findViewById(R.id.rowNombreProducto);
-        final TextView txtRowCantidad = rowView.findViewById(R.id.rowCantidadProducto);
+        final TextView txtRowNombreProducto = rowView.findViewById(R.id.);
+        final TextView txtRowCantidad = rowView.findViewById(R.id.);
 
-        txtRowNombreProducto.setText(listaProductos.get(i).getNombre());
-        txtRowCantidad.setText(String.valueOf(listaProductos.get(i).getCantidad()));
+        txtRowCantidad.setText(String.valueOf(listaAlmacenes.get(i).getId()));
+        txtRowNombreProducto.setText(listaAlmacenes.get(i).getNombre());
+
 
         rowView.setOnClickListener((View v) -> {
-                // TODO relllenar boton
         });
 
         return rowView;

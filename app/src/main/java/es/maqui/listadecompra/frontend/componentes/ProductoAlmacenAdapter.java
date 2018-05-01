@@ -12,16 +12,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
+import es.maqui.listadecompra.backend.dominio.ProductoAlmacen;
 
-public class ProductoCompletoAdapter extends BaseAdapter {
+public class ProductoAlmacenAdapter extends BaseAdapter {
 
-    private List<Producto> listaProductos;
+    private List<ProductoAlmacen> listaProductos;
     private LayoutInflater inflater;
 
-    private Producto producto;
-    private int posicion;
-
-    public ProductoCompletoAdapter(Activity activity, List<Producto> listaProductos) {
+    public ProductoAlmacenAdapter(Activity activity, List<ProductoAlmacen> listaProductos) {
         this.listaProductos = listaProductos;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -45,13 +43,13 @@ public class ProductoCompletoAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View rowView = inflater.inflate(R.layout.plantilla_lista_compra_creada, null);
 
-        final TextView txtRowNombreProducto = rowView.findViewById(R.id.rowNombreProductoListaDefinitiva);
-        final TextView txtRowCantidad = rowView.findViewById(R.id.rowCantidadProductoListaDefinitiva);
+        final TextView txtRowNombreProducto = rowView.findViewById(R.id.);
+        final TextView txtRowCantidad = rowView.findViewById(R.id.);
         final Switch switchCogido = rowView.findViewById(R.id.rowCogido);
 
         txtRowNombreProducto.setText(listaProductos.get(i).getNombre());
         txtRowCantidad.setText(String.valueOf(listaProductos.get(i).getCantidad()));
-        switchCogido.setChecked((listaProductos.get(i).getCogido() < 1) ? false : true);
+        switchCogido.setChecked(Boolean.FALSE);
 
         rowView.setOnClickListener((View v) -> {
         });

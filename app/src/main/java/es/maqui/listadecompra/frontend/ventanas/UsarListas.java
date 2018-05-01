@@ -10,7 +10,7 @@ import java.util.List;
 
 import es.maqui.listadecompra.R;
 import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
-import es.maqui.listadecompra.frontend.componentes.ProductoCompletoAdapter;
+import es.maqui.listadecompra.frontend.componentes.ProductoAlmacenAdapter;
 
 public class UsarListas extends AppCompatActivity {
 
@@ -41,7 +41,7 @@ public class UsarListas extends AppCompatActivity {
 
     private void refrescarDatos(List<Producto> listaProductos) {
         if ((listaProductos != null) && (listaProductos.size() != 0)) {
-            ProductoCompletoAdapter adapter = new ProductoCompletoAdapter(UsarListas.this, listaProductos);
+            ProductoAlmacenAdapter adapter = new ProductoAlmacenAdapter(UsarListas.this, listaProductos);
             lstProductosView.setAdapter(adapter);
         }
     }

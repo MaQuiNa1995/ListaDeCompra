@@ -1,17 +1,23 @@
 <resources>
     <!-- Ventana Principal -->
     <string name="nombre_aplicacion">Lista De La Compra</string>
-    <string name="crear_lista">Crear Lista</string>
-    <string name="gestionar_listas_creadas">Gestionar Listas Creadas</string>
+    <string name="gestion_Almacen">Gestion Almacenes</string>
+    <string name="gestion_ListasCompra">Gestion Listas De La Compra</string>
     <string name="salir">Cerrar Aplicación</string>
 
-    <!-- Ventana Gestion Listas -->
-    <string name="annadir_producto">Añadir Producto</string>
-    <string name="nombre_producto">Nombre Del Producto</string>
+    <!-- Ventana gestionAlmacen -->
+    <string name="annadir_Almacen">Crear Almacen</string>
+    <string name="modificar_Almacen">Modificar Almacen</string>
+    <string name="eliminar_Almacen">Eliminar Almacen</string>
+    <string name="ver_Almacen">Ver Almacenes</string>
 
-    <!-- Ventana Creacion Lista Compra -->
-    <string name="cantidad">Cantidad a Comprar</string>
-    <string name="previsualizacion">Previsualización De La Lista De La Compra:</string>
-    <string name="eliminarProducto">Eliminar Producto</string>
+    <!-- Ventana gestionListasCompra -->
+    <string name="annadir_Lista">Crear Lista Compra</string>
+    <string name="modificar_Lista">Modificar Lista De La Compra</string>
+    <string name="eliminar_Lista">Eliminar Lista De La Compra</string>
+    <string name="ver_Lista">Ver Listas De Compra</string>
+
+    <!-- Ventana modificarAlmacen-->
+
 
 </resources>

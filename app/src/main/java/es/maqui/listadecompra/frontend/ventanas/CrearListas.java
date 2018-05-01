@@ -13,7 +13,7 @@ import java.util.List;
 
 import es.maqui.listadecompra.R;
 import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
-import es.maqui.listadecompra.frontend.componentes.ProductoAdapter;
+import es.maqui.listadecompra.frontend.componentes.ProductoListaCompraAdapter;
 
 public class CrearListas extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class CrearListas extends AppCompatActivity {
     private Button botonAnnadir;
     private Button botonEliminar;
 
-    private ProductoAdapter adapter=null;
+    private ProductoListaCompraAdapter adapter=null;
 
     private Producto prodSeleccionado=null;
 
@@ -88,7 +88,7 @@ public class CrearListas extends AppCompatActivity {
 
     private void refrescarDatos(List<Producto> listaProductos) {
         if ((listaProductos != null) && (listaProductos.size() != 0)) {
-            adapter = new ProductoAdapter(CrearListas.this, listaProductos);
+            adapter = new ProductoListaCompraAdapter(CrearListas.this, listaProductos);
             lstProductosView.setAdapter(adapter);
         }
     }
