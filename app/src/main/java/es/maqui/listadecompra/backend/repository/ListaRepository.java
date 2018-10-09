@@ -12,7 +12,7 @@ import java.util.List;
 
 import es.maqui.listadecompra.backend.dominio.ListaCompra;
 
-public class ListaCompraRepository extends SQLiteOpenHelper {
+public class ListaRepository extends SQLiteOpenHelper {
 
     //Base De Datos
     private static final int VERSION_BD = 2;
@@ -23,7 +23,7 @@ public class ListaCompraRepository extends SQLiteOpenHelper {
     private static final String COLUMNA_ID = "ID";
     private static final String COLUMNA_NOMBRRE = "NOMBRE";
 
-    public ListaCompraRepository(Context context) {
+    public ListaRepository(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 

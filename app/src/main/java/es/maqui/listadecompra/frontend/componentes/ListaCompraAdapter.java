@@ -41,13 +41,14 @@ public class ListaCompraAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View rowView = inflater.inflate(R.layout.plantilla_lista_compra_creada, null);
+        View rowView = inflater.inflate(R.layout.plantilla_lista_compra, null);
 
-        final TextView txtRowNombreProducto = rowView.findViewById(R.id.);
+        TextView txtRowNombreProducto = rowView.findViewById(R.id.rowNombreProducto);
 
         txtRowNombreProducto.setText(listaProductos.get(i).getNombre());
 
         rowView.setOnClickListener((View v) -> {
+
         });
 
         return rowView;

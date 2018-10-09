@@ -20,22 +20,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        >
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/botonCrearLista"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/gestion_Almacen" />
+            android:text="@string/crear_listaCompra" />
 
         <Button
             android:id="@+id/botonGestionarListasCreadas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/gestion_ListasCompra" />
+            android:text="@string/usar_ListaCompra" />
 
         <Button
             android:id="@+id/botonCerrarAplicacion"

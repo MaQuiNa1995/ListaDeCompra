@@ -19,16 +19,12 @@ public class Main extends AppCompatActivity {
         Button botonGestionarListas = findViewById(R.id.botonGestionarListasCreadas);
         Button botonCerrar = findViewById(R.id.botonCerrarAplicacion);
 
-        botonCrearLista.setOnClickListener((View v) -> {
-            startActivity(new Intent(Main.this, CrearListas.class));
-        });
+        botonCrearLista.setOnClickListener((View v) -> startActivity(new Intent(Main.this, CrearListas.class)));
 
-        botonGestionarListas.setOnClickListener((View v) -> {
-            startActivity(new Intent(Main.this, UsarListas.class));
-        });
+        botonGestionarListas.setOnClickListener((View v) -> startActivity(new Intent(Main.this, UsarListas.class)));
 
         botonCerrar.setOnClickListener((View v) -> {
-            moveTaskToBack(true);
+            moveTaskToBack(Boolean.TRUE);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
         });

@@ -1,11 +1,12 @@
 package es.maqui.listadecompra.backend.dominio;
 
-public class ProductoCompra {
+public class Producto {
 
-    Long id;
-    String nombre;
-    Integer cantidad;
-    Long idProductoCompra;
+    private Long id;
+    private String nombre;
+    private Integer cantidad;
+    private Long idProductoCompra;
+    private int cogido;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class ProductoCompra {
 
     public void setIdProductoCompra(Long idProductoCompra) {
         this.idProductoCompra = idProductoCompra;
+    }
+
+    public int getCogido() {
+        return cogido;
+    }
+
+    public void setCogido(int cogido) {
+        this.cogido = cogido;
     }
 }

@@ -6,19 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.dominio.ProductoCompra;
+import es.maqui.listadecompra.backend.dominio.Producto;
 
-public class ProductoListaCompraAdapter extends BaseAdapter {
+public class ProductoAdapter extends BaseAdapter {
 
-    private List<ProductoCompra> listaProductos;
+    private List<Producto> listaProductos;
     private LayoutInflater inflater;
 
-    public ProductoListaCompraAdapter(Activity activity, List<ProductoCompra> listaProductos) {
+    public ProductoAdapter(Activity activity, List<Producto> listaProductos) {
         this.listaProductos = listaProductos;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -29,7 +31,7 @@ public class ProductoListaCompraAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public Producto getItem(int i) {
         return listaProductos.get(i);
     }
 
@@ -42,15 +44,17 @@ public class ProductoListaCompraAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View rowView = inflater.inflate(R.layout.plantilla_lista_compra, null);
 
-        final TextView txtRowNombreProducto = rowView.findViewById(R.id.);
-        final TextView txtRowCantidad = rowView.findViewById(R.id.);
+        TextView txtRowNombreProducto = rowView.findViewById(R.id.rowNombreProducto);
+        TextView txtRowCantidad = rowView.findViewById(R.id.rowCantidadProducto);
+        CheckBox checkBox = rowView.findViewById(R.id.rowCogidoProducto);
 
-        txtRowNombreProducto.setText(listaProductos.get(i).getNombre());
-        txtRowCantidad.setText(String.valueOf(listaProductos.get(i).getCantidad()));
+        Producto producto = listaProductos.get(i);
 
-        rowView.setOnClickListener((View v) -> {
-                // TODO relllenar boton
-        });
+        if(producto != null){
+            txtRowNombreProducto.setText(producto.getNombre());
+            txtRowCantidad.setText(String.valueOf(producto.getCantidad()));
+            checkBox.setChecked(producto.getCogido()==1);
+        }
 
         return rowView;
     }

@@ -9,34 +9,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import es.maqui.listadecompra.R;
-import es.maqui.listadecompra.backend.repository.ProductoAlmacenRepository;
-import es.maqui.listadecompra.frontend.componentes.ProductoListaCompraAdapter;
+import es.maqui.listadecompra.backend.dominio.Producto;
+import es.maqui.listadecompra.backend.repository.ProductoRepository;
+import es.maqui.listadecompra.frontend.componentes.ProductoAdapter;
 
 public class CrearListas extends AppCompatActivity {
 
-    private ProductoAlmacenRepository repositoryProducto;
+    private ProductoRepository productoRepository;
 
     private TextView textNombreProducto;
     private TextView textCantidadProducto;
     private ListView lstProductosView;
 
-    private List<Producto> listaProductos;
-
-    private Button botonAnnadir;
-    private Button botonEliminar;
-
-    private ProductoListaCompraAdapter adapter=null;
-
-    private Producto prodSeleccionado=null;
+    private List<Producto> listaProductos = new ArrayList<>();
+    private ProductoAdapter adapter = null;
+    private Producto prodSeleccionado = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crear_listas);
-        repositoryProducto = new ProductoAlmacenRepository(this);
+        productoRepository = new ProductoRepository(this);
 
         textNombreProducto = findViewById(R.id.textNombreProducto);
         textCantidadProducto = findViewById(R.id.textCantidad);
@@ -44,14 +41,15 @@ public class CrearListas extends AppCompatActivity {
         lstProductosView = findViewById(R.id.listaCreacionProductos);
         lstProductosView.setClickable(Boolean.TRUE);
 
-        botonAnnadir = findViewById(R.id.botonAnadirProducto);
-        botonEliminar = findViewById(R.id.botonEliminarProducto);
+        Button botonAnnadir = findViewById(R.id.botonAnadirProducto);
+        Button botonEliminar = findViewById(R.id.botonEliminarProducto);
 
-        listaProductos = repositoryProducto.getListaProductos();
+        listaProductos = productoRepository.getListaProductos();
 
-        if(listaProductos == null){
-            listaProductos = new ArrayList<>();
-        }
+        lstProductosView.setOnItemClickListener((parent, view, pos, id) ->{
+                //prodSeleccionado = listaProductos.get(pos)
+                lstProductosView.getSelectedItem();
+        });
 
         refrescarDatos(listaProductos);
 
@@ -63,37 +61,50 @@ public class CrearListas extends AppCompatActivity {
             producto.setCogido(0);
 
             listaProductos.add(producto);
-            repositoryProducto.annadirProducto(producto);
+            productoRepository.annadirProducto(producto);
 
             textNombreProducto.setText("");
             textCantidadProducto.setText("");
 
             refrescarDatos(listaProductos);
 
-            mostrarNotificacion("Se Ha Añadido: "+producto.getNombre());
+            mostrarNotificacion("Se Ha Añadido: " + producto.getNombre());
         });
 
         botonEliminar.setOnClickListener((View v) -> {
 
-            if(prodSeleccionado!=null) {
-                repositoryProducto.eliminarProducto(prodSeleccionado);
-
+            if (prodSeleccionado != null) {
+                productoRepository.eliminarProducto(prodSeleccionado);
                 refrescarDatos(listaProductos);
                 mostrarNotificacion("Se Ha Eliminado: " + prodSeleccionado.getNombre());
-            }else{
+            } else {
                 mostrarNotificacion("Error: No se ha seleccionado ningún producto");
             }
+        });
+
+        botonEliminar.setOnLongClickListener(v -> {
+
+            productoRepository.eliminarProductos();
+            vaciarDatos();
+            mostrarNotificacion("Se ha vaciado la lista de la compra");
+            return true;
         });
     }
 
     private void refrescarDatos(List<Producto> listaProductos) {
         if ((listaProductos != null) && (listaProductos.size() != 0)) {
-            adapter = new ProductoListaCompraAdapter(CrearListas.this, listaProductos);
+            adapter = new ProductoAdapter(CrearListas.this, listaProductos);
             lstProductosView.setAdapter(adapter);
         }
     }
 
-    private void mostrarNotificacion(String contenido){
+    private void vaciarDatos() {
+            adapter = new ProductoAdapter(CrearListas.this, Collections.emptyList());
+        listaProductos.clear();
+            lstProductosView.setAdapter(adapter);
+    }
+
+    private void mostrarNotificacion(String contenido) {
         Toast.makeText(this, contenido, Toast.LENGTH_SHORT).show();
     }
 }

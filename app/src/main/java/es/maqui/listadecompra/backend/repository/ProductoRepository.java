@@ -10,34 +10,33 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.maqui.listadecompra.backend.dominio.ProductoAlmacen;
-import es.maqui.listadecompra.backend.dominio.ProductoCompra;
+import es.maqui.listadecompra.backend.dominio.Producto;
 
-public class ProductoAlmacenRepository extends SQLiteOpenHelper {
+public class ProductoRepository extends SQLiteOpenHelper {
 
     //Base De Datos
-    private static final int VERSION_BD = 1;
+    private static final int VERSION_BD = 3;
     private static final String NOMBRE_BD = "MaquiListaCompraBD";
 
     //Tablas
-    private static final String NOMBRE_TABLA = "LISTA_COMPRA";
+    private static final String NOMBRE_TABLA = "PRODUCTO_COMPRA";
     private static final String COLUMNA_ID = "ID";
-    private static final String COLUMNA_NOMBRRE = "NOMBRE_PRODUCTO";
-    private static final String COLUMNA_CANTIDAD = "CANTIDAD_PRODUCTO";
-    private static final String COLUMNA_ID_ALMACEN = "ID_ALMACEN";
+    private static final String COLUMNA_NOMBRRE = "NOMBRE";
+    private static final String COLUMNA_CANTIDAD = "CANTIDAD";
+    private static final String COLUMNA_ID_LISTA = "ID_LISTA_COMPRA";
 
-    public ProductoAlmacenRepository(Context context) {
+    public ProductoRepository(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
     }
 
-    public void annadirProducto(ProductoAlmacen producto) {
+    public void annadirProducto(Producto producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
             contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            contenedor.put(COLUMNA_ID_ALMACEN, producto.getIdProductoAlmacen());
+            contenedor.put(COLUMNA_ID_LISTA, producto.getIdProductoCompra());
 
             db.insert(NOMBRE_TABLA, null, contenedor);
 
@@ -47,14 +46,14 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
 
     }
 
-    public int actualizarProducto(ProductoAlmacen producto) {
+    public int actualizarProducto(Producto producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
             ContentValues contenedor = new ContentValues();
             contenedor.put(COLUMNA_NOMBRRE, producto.getNombre());
             contenedor.put(COLUMNA_CANTIDAD, producto.getCantidad());
-            contenedor.put(COLUMNA_ID_ALMACEN, producto.getIdProductoAlmacen());
+            contenedor.put(COLUMNA_ID_LISTA, producto.getIdProductoCompra());
 
             return db.update(NOMBRE_TABLA, contenedor, COLUMNA_ID + " =?", new String[]{String.valueOf(producto.getId())});
 
@@ -64,7 +63,7 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
         }
     }
 
-    public void eliminarProducto(ProductoAlmacen producto) {
+    public void eliminarProducto(Producto producto) {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
@@ -75,29 +74,32 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
         }
     }
 
-    public ProductoAlmacen getProducto(int id) {
-
-        ProductoAlmacen producto = null;
+    public void eliminarProductos() {
 
         try (SQLiteDatabase db = this.getWritableDatabase()) {
 
+            db.execSQL("DELETE FROM " + NOMBRE_TABLA);
 
-            try (Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE, COLUMNA_CANTIDAD}, COLUMNA_ID + "=?",
-                    new String[]{String.valueOf(id)}, null, null, null, null)) {
+        } catch (Exception e) {
+            Log.e("Error al eliminar", "Ha ocurrido un error al intentar vaciar la lista de la compra\n Traza de log: " + e.getMessage());
+        }
+    }
 
+    public Producto getProducto(int id) {
 
-                if (cursor != null) {
-                    cursor.moveToFirst();
+        Producto producto = null;
 
-                    producto = new ProductoAlmacen();
-                    producto.setId(cursor.getLong(0));
-                    producto.setNombre(cursor.getString(1));
-                    producto.setCantidad(cursor.getInt(2));
-                    producto.setIdProductoAlmacen(cursor.getLong(3));
-                }
-            } catch (Exception e) {
-                Log.wtf("Error al obtener producto", "Ha ocurrido un error al intentar recuperar el producto " + producto.toString() + " Traza de log: " + e.getMessage());
-                return null;
+        try (SQLiteDatabase db = this.getWritableDatabase(); Cursor cursor = db.query(NOMBRE_TABLA, new String[]{COLUMNA_ID, COLUMNA_NOMBRRE, COLUMNA_CANTIDAD}, COLUMNA_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null)) {
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+
+                producto = new Producto();
+                producto.setId(cursor.getLong(0));
+                producto.setNombre(cursor.getString(1));
+                producto.setCantidad(cursor.getInt(2));
+                producto.setIdProductoCompra(cursor.getLong(3));
             }
 
             return producto;
@@ -109,21 +111,21 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
 
     }
 
-    public List<ProductoAlmacen> getListaProductos() {
+    public List<Producto> getListaProductos() {
 
-        List<ProductoAlmacen> listaProductos = new ArrayList<>();
+        List<Producto> listaProductos = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NOMBRE_TABLA;
 
-        ProductoAlmacen producto;
+        Producto producto;
 
         try (SQLiteDatabase db = this.getWritableDatabase(); Cursor cursor = db.rawQuery(selectQuery, null)) {
             if (cursor.moveToFirst()) {
                 do {
-                    producto = new ProductoAlmacen();
+                    producto = new Producto();
                     producto.setId(cursor.getLong(0));
                     producto.setNombre(cursor.getString(1));
                     producto.setCantidad(cursor.getInt(2));
-                    producto.setIdProductoAlmacen(cursor.getLong(3));
+                    producto.setIdProductoCompra(cursor.getLong(3));
 
                     listaProductos.add(producto);
                 }
@@ -144,7 +146,7 @@ public class ProductoAlmacenRepository extends SQLiteOpenHelper {
                 + COLUMNA_ID + " INTEGER PRIMARY KEY,"
                 + COLUMNA_NOMBRRE + " TEXT,"
                 + COLUMNA_CANTIDAD + " INTEGER,"
-                + COLUMNA_ID_ALMACEN + " INTEGER"
+                + COLUMNA_ID_LISTA + " INTEGER"
                 + ")";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);
